@@ -1,17 +1,16 @@
 package pl.wilk.cinematickets.model;
 
+
 import javax.persistence.*;
 
 @Entity
-public class RoomEntity {
+public class MovieEntity {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @Column
-    private String name;
+    private String title;
 
-    @Column
-    private Integer maxSeats;
 }
