@@ -31,8 +31,8 @@ public class ScreeningEntity {
     private RoomEntity room;
 
     @ElementCollection
-    @CollectionTable(name="seats", joinColumns = @JoinColumn(name = "screeningId"))
+    @CollectionTable(name="seats", joinColumns = @JoinColumn(name = "screening_id"))
     @Column
-    private List<SeatEmbeddable> seats;
+    private List<Seat> seats;
 
 }

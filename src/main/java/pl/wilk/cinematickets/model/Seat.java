@@ -5,18 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
 @Embeddable
 @Data
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class SeatEmbeddable {
+public class Seat {
+
     @Column
     private Integer number;
 
-    @Column
-    private Boolean isReserved;
+    @ManyToOne
+    private ReservationEntity reservation;
+
+
 }

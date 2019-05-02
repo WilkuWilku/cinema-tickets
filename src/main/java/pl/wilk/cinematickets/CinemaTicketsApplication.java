@@ -6,18 +6,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.wilk.cinematickets.model.*;
-import pl.wilk.cinematickets.repository.MovieRepository;
-import pl.wilk.cinematickets.repository.RoomRepository;
-import pl.wilk.cinematickets.repository.ScreeningRepository;
-import pl.wilk.cinematickets.repository.TicketTypeRepository;
+import pl.wilk.cinematickets.repository.*;
 
-import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @SpringBootApplication
 public class CinemaTicketsApplication implements CommandLineRunner {
@@ -33,6 +28,10 @@ public class CinemaTicketsApplication implements CommandLineRunner {
 
     @Autowired
     private ScreeningRepository screeningRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
 
     public static void main(String[] args) {
         SpringApplication.run(CinemaTicketsApplication.class, args);
@@ -84,8 +83,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .startingTime(LocalDateTime.of(2019, 5, 13, 15, 0, 0, 0))
                 .seats(IntStream.range(1, room1.getMaxSeats()+1)
                         .mapToObj(index ->
-                            SeatEmbeddable.builder()
-                                    .isReserved(false)
+                            Seat.builder()
+                                    //.isReserved(false)
                                     .number(index).build()
                         ).collect(Collectors.toList()))
                 .build();
@@ -96,8 +95,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .startingTime(LocalDateTime.of(2019, 5, 13, 20, 45, 0, 0))
                 .seats(IntStream.range(1, room1.getMaxSeats()+1)
                         .mapToObj(index ->
-                                SeatEmbeddable.builder()
-                                        .isReserved(false)
+                                Seat.builder()
+                                        //.isReserved(false)
                                         .number(index).build()
                         ).collect(Collectors.toList()))
                 .build();
@@ -108,8 +107,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .startingTime(LocalDateTime.of(2019, 5, 14, 16, 20, 0, 0))
                 .seats(IntStream.range(1, room2.getMaxSeats()+1)
                         .mapToObj(index ->
-                                SeatEmbeddable.builder()
-                                        .isReserved(false)
+                                Seat.builder()
+                                        //.isReserved(false)
                                         .number(index).build()
                         ).collect(Collectors.toList()))
                 .build();
@@ -120,8 +119,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .startingTime(LocalDateTime.of(2019, 5, 14, 21, 45, 0, 0))
                 .seats(IntStream.range(1, room2.getMaxSeats()+1)
                         .mapToObj(index ->
-                                SeatEmbeddable.builder()
-                                        .isReserved(false)
+                                Seat.builder()
+                                        //.isReserved(false)
                                         .number(index).build()
                         ).collect(Collectors.toList()))
                 .build();
@@ -132,8 +131,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .startingTime(LocalDateTime.of(2019, 5, 14, 15, 15, 0, 0))
                 .seats(IntStream.range(1, room3.getMaxSeats()+1)
                         .mapToObj(index ->
-                                SeatEmbeddable.builder()
-                                        .isReserved(false)
+                                Seat.builder()
+                                        //.isReserved(false)
                                         .number(index).build()
                         ).collect(Collectors.toList()))
                 .build();
@@ -144,12 +143,27 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .startingTime(LocalDateTime.of(2019, 5, 13, 21, 45, 0, 0))
                 .seats(IntStream.range(1, room3.getMaxSeats()+1)
                         .mapToObj(index ->
-                                SeatEmbeddable.builder()
-                                        .isReserved(false)
+                                Seat.builder()
+                                        //.isReserved(false)
                                         .number(index).build()
                         ).collect(Collectors.toList()))
                 .build();
 
         screeningRepository.saveAll(List.of(screening1, screening2, screening3, screening4, screening5, screening6));
+
+
+        /* Insert Reservations */
+        ReservationEntity reservation1 = ReservationEntity.builder()
+                .ownersFirstName("Jan")
+                .ownersLastName("Kowalski")
+                .screening(screening1)
+                .build();
+
+        reservationRepository.save(reservation1);
+        screening1.getSeats().stream()
+                .filter(seat -> Set.of(1, 2, 3, 4, 5, 6).contains(seat.getNumber()))
+                .forEach(seat -> seat.setReservation(reservation1));
+        screeningRepository.save(screening1);
+
     }
 }
