@@ -1,9 +1,20 @@
 package pl.wilk.cinematickets.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Data
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Table(name = "screenings")
 public class ScreeningEntity {
 
     @Id
@@ -18,5 +29,10 @@ public class ScreeningEntity {
 
     @ManyToOne
     private RoomEntity room;
+
+    @ElementCollection
+    @CollectionTable(name="seats", joinColumns = @JoinColumn(name = "screeningId"))
+    @Column
+    private List<SeatEmbeddable> seats;
 
 }

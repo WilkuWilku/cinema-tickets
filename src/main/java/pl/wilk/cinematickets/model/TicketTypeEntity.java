@@ -1,11 +1,15 @@
 package pl.wilk.cinematickets.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import lombok.*;
+
+import javax.persistence.*;
 
 @Entity
+@Builder
+@Data
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Table(name = "ticketTypes")
 public class TicketTypeEntity {
 
     @Id
