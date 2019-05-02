@@ -82,11 +82,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .room(room1)
                 .startingTime(LocalDateTime.of(2019, 5, 13, 15, 0, 0, 0))
                 .seats(IntStream.range(1, room1.getMaxSeats()+1)
-                        .mapToObj(index ->
-                            Seat.builder()
-                                    //.isReserved(false)
-                                    .number(index).build()
-                        ).collect(Collectors.toList()))
+                        .mapToObj(index -> Seat.builder().number(index).build())
+                        .collect(Collectors.toList()))
                 .build();
 
         ScreeningEntity screening2 = ScreeningEntity.builder()
@@ -94,11 +91,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .room(room1)
                 .startingTime(LocalDateTime.of(2019, 5, 13, 20, 45, 0, 0))
                 .seats(IntStream.range(1, room1.getMaxSeats()+1)
-                        .mapToObj(index ->
-                                Seat.builder()
-                                        //.isReserved(false)
-                                        .number(index).build()
-                        ).collect(Collectors.toList()))
+                        .mapToObj(index -> Seat.builder().number(index).build())
+                        .collect(Collectors.toList()))
                 .build();
 
         ScreeningEntity screening3 = ScreeningEntity.builder()
@@ -106,11 +100,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .room(room2)
                 .startingTime(LocalDateTime.of(2019, 5, 14, 16, 20, 0, 0))
                 .seats(IntStream.range(1, room2.getMaxSeats()+1)
-                        .mapToObj(index ->
-                                Seat.builder()
-                                        //.isReserved(false)
-                                        .number(index).build()
-                        ).collect(Collectors.toList()))
+                        .mapToObj(index -> Seat.builder().number(index).build())
+                        .collect(Collectors.toList()))
                 .build();
 
         ScreeningEntity screening4 = ScreeningEntity.builder()
@@ -118,11 +109,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .room(room2)
                 .startingTime(LocalDateTime.of(2019, 5, 14, 21, 45, 0, 0))
                 .seats(IntStream.range(1, room2.getMaxSeats()+1)
-                        .mapToObj(index ->
-                                Seat.builder()
-                                        //.isReserved(false)
-                                        .number(index).build()
-                        ).collect(Collectors.toList()))
+                        .mapToObj(index -> Seat.builder().number(index).build())
+                        .collect(Collectors.toList()))
                 .build();
 
         ScreeningEntity screening5 = ScreeningEntity.builder()
@@ -130,11 +118,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .room(room3)
                 .startingTime(LocalDateTime.of(2019, 5, 14, 15, 15, 0, 0))
                 .seats(IntStream.range(1, room3.getMaxSeats()+1)
-                        .mapToObj(index ->
-                                Seat.builder()
-                                        //.isReserved(false)
-                                        .number(index).build()
-                        ).collect(Collectors.toList()))
+                        .mapToObj(index -> Seat.builder().number(index).build())
+                        .collect(Collectors.toList()))
                 .build();
 
         ScreeningEntity screening6 = ScreeningEntity.builder()
@@ -142,11 +127,8 @@ public class CinemaTicketsApplication implements CommandLineRunner {
                 .room(room3)
                 .startingTime(LocalDateTime.of(2019, 5, 13, 21, 45, 0, 0))
                 .seats(IntStream.range(1, room3.getMaxSeats()+1)
-                        .mapToObj(index ->
-                                Seat.builder()
-                                        //.isReserved(false)
-                                        .number(index).build()
-                        ).collect(Collectors.toList()))
+                        .mapToObj(index -> Seat.builder().number(index).build())
+                        .collect(Collectors.toList()))
                 .build();
 
         screeningRepository.saveAll(List.of(screening1, screening2, screening3, screening4, screening5, screening6));
