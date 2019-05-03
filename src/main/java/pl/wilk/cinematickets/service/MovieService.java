@@ -19,7 +19,11 @@ public class MovieService {
 
     public void editMovie(MovieEntity newMovie, Long id){
         movieRepository.findById(id)
-                .ifPresentOrElse(oldMovie -> oldMovie.setTitle(newMovie.getTitle()),
+                .ifPresentOrElse(oldMovie -> {
+                    if(newMovie.getTitle() != null)
+                        oldMovie.setTitle(newMovie.getTitle());
+                    movieRepository.save(oldMovie);
+                        },
                         () -> new IllegalArgumentException("No movie found - id: "+id));
     }
 

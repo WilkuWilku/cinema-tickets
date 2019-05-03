@@ -11,4 +11,5 @@ import java.util.List;
 public interface ScreeningRepository extends JpaRepository<ScreeningEntity, Long> {
     List<ScreeningEntity> findScreeningEntitiesByStartingTimeBetweenOrderByStartingTime
             (LocalDateTime start, LocalDateTime end);
+
 }

@@ -7,6 +7,7 @@ import pl.wilk.cinematickets.repository.ScreeningRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ScreeningService {
@@ -36,4 +37,15 @@ public class ScreeningService {
     public List<ScreeningEntity> findAllScreeningsBetween(LocalDateTime start, LocalDateTime end){
         return screeningRepository.findScreeningEntitiesByStartingTimeBetweenOrderByStartingTime(start, end);
     }
+
+    public List<Integer> findAvailableSeatsOfScreening(Long id){
+        ScreeningEntity screening = screeningRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No screening found - id: "+id));
+
+        return screening.getSeats().stream()
+                .filter(seat -> seat.getReservation() == null)
+                .map(seat -> seat.getNumber())
+                .collect(Collectors.toList());
+    }
+
 }

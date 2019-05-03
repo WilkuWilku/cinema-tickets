@@ -1,5 +1,6 @@
 package pl.wilk.cinematickets.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +19,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class ReservationEntity {
+    private static final int EXPIRES_AFTER_HOURS = 1;
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -34,7 +37,12 @@ public class ReservationEntity {
     @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
 
+    @Column
+    @Builder.Default
+    private LocalDateTime expires = LocalDateTime.now().plusHours(EXPIRES_AFTER_HOURS);
+
     @ManyToOne
+    @JsonBackReference
     private ScreeningEntity screening;
 
 }

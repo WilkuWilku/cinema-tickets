@@ -1,5 +1,6 @@
 package pl.wilk.cinematickets.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class Seat {
     private Integer number;
 
     @ManyToOne
+    @JsonBackReference
     private ReservationEntity reservation;
 
 

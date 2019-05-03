@@ -1,5 +1,7 @@
 package pl.wilk.cinematickets.model;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,16 +20,18 @@ import java.util.List;
 public class ScreeningEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
     private LocalDateTime startingTime;
 
     @ManyToOne
+    @JsonBackReference
     private MovieEntity movie;
 
     @ManyToOne
+    @JsonBackReference
     private RoomEntity room;
 
     @ElementCollection

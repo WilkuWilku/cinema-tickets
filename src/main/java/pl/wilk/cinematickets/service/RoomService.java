@@ -19,8 +19,11 @@ public class RoomService {
 
     public void editRoom(RoomEntity newRoom, Long id){
         roomRepository.findById(id)
-                .ifPresentOrElse(oldRoom ->
-                    oldRoom.setName(newRoom.getName()),
+                .ifPresentOrElse(oldRoom -> {
+                            if(newRoom.getName() != null)
+                                oldRoom.setName(newRoom.getName());
+                            roomRepository.save(oldRoom);
+                        },
                         () -> new IllegalArgumentException("No room found - id: "+id));
     }
 
