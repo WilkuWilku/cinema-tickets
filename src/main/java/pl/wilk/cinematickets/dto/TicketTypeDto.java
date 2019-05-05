@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class TicketTypeDto {
-
+    private Long id;
     private String name;
     private Long price;
 }

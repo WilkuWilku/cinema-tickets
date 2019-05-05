@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class ReservationDto {
-
+    private Long id;
     private String ownersFirstName;
     private String ownersLastName;
     private Long screeningId;

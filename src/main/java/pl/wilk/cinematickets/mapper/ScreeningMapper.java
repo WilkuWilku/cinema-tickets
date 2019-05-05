@@ -2,13 +2,14 @@ package pl.wilk.cinematickets.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueCheckStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.wilk.cinematickets.dto.ScreeningDto;
 import pl.wilk.cinematickets.model.ScreeningEntity;
 import pl.wilk.cinematickets.service.MovieService;
 import pl.wilk.cinematickets.service.RoomService;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public abstract class ScreeningMapper {
 
     @Autowired

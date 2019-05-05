@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class RoomDto {
-
+    private Long id;
     private String name;
     private Integer maxSeats;
 }

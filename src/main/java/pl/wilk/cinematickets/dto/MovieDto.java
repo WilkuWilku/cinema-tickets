@@ -10,6 +10,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class MovieDto {
-
+    private Long id;
     private String title;
 }

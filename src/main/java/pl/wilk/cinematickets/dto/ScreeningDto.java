@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class ScreeningDto {
-
+    private Long id;
     private LocalDateTime startingTime;
     private Long movieId;
     private Long roomId;
