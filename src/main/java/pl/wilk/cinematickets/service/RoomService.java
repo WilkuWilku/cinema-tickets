@@ -30,4 +30,9 @@ public class RoomService {
     public List<RoomEntity> findAllRooms(){
         return roomRepository.findAll();
     }
+
+    public RoomEntity findRoomById(Long id){
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No room found - id: "+id));
+    }
 }

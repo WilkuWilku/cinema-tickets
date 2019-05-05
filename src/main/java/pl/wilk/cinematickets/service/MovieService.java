@@ -1,5 +1,6 @@
 package pl.wilk.cinematickets.service;
 
+import com.sun.nio.sctp.IllegalReceiveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.wilk.cinematickets.model.MovieEntity;
@@ -29,6 +30,11 @@ public class MovieService {
 
     public List<MovieEntity> findAllMovies(){
         return movieRepository.findAll();
+    }
+
+    public MovieEntity findMovieById(Long id){
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new IllegalReceiveException("No movie found - id: "+id));
     }
 
 }

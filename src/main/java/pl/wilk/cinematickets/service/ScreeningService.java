@@ -39,13 +39,17 @@ public class ScreeningService {
     }
 
     public List<Integer> findAvailableSeatsOfScreening(Long id){
-        ScreeningEntity screening = screeningRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No screening found - id: "+id));
+        ScreeningEntity screening = findScreeningById(id);
 
         return screening.getSeats().stream()
                 .filter(seat -> seat.getReservation() == null)
                 .map(seat -> seat.getNumber())
                 .collect(Collectors.toList());
+    }
+
+    public ScreeningEntity findScreeningById(Long id){
+        return screeningRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No screening found - id: "+id));
     }
 
 }
