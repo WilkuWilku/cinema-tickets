@@ -6,6 +6,7 @@ import pl.wilk.cinematickets.model.TicketTypeEntity;
 import pl.wilk.cinematickets.repository.TicketTypeRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TicketTypeService {
@@ -35,5 +36,19 @@ public class TicketTypeService {
 
     public void deleteTicketType(Long id){
         ticketTypeRepository.deleteById(id);
+    }
+
+    public Long calculateTotalAmount(Map<Long, Integer> ticketData){
+        //return ticketData.entrySet().stream()
+        //        .map(entry -> entry.getKey()*entry.getValue())
+        //        .reduce(0, (sum1, sum2) -> sum1+sum2);
+
+        return ticketData.entrySet().stream()
+                .mapToLong(entry ->
+                        ticketTypeRepository.findById(entry.getKey())
+                                .orElseThrow(() -> new IllegalArgumentException("No ticket type found with id: "+entry.getKey()))
+                        .getPrice()*entry.getValue())
+                .sum();
+
     }
 }

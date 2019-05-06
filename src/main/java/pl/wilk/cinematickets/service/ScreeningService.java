@@ -26,6 +26,7 @@ public class ScreeningService {
                         oldScreening.setMovie(newScreening.getMovie());
                     if(newScreening.getRoom() != null)
                         oldScreening.setRoom(newScreening.getRoom());
+                    screeningRepository.save(oldScreening);
                         },
                         () -> new IllegalArgumentException("No screening found - id: "+id));
     }
@@ -51,5 +52,6 @@ public class ScreeningService {
         return screeningRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No screening found - id: "+id));
     }
+
 
 }

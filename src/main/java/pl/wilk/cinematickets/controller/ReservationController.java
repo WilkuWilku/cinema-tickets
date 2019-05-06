@@ -8,8 +8,10 @@ import pl.wilk.cinematickets.dto.ReservationDto;
 import pl.wilk.cinematickets.mapper.ReservationMapper;
 import pl.wilk.cinematickets.model.ReservationEntity;
 import pl.wilk.cinematickets.service.ReservationService;
+import pl.wilk.cinematickets.service.TicketTypeService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,12 +22,17 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @Autowired
+    private TicketTypeService ticketTypeService;
+
+    @Autowired
     private ReservationMapper mapper;
 
     @PostMapping
-    public ResponseEntity newReservation(@RequestBody ReservationDto reservationDto){
-        reservationService.addReservation(mapper.toReservationEntity(reservationDto));
-        return new ResponseEntity(HttpStatus.CREATED);
+    public ResponseEntity<Map<String, Object>> newReservation(@RequestBody ReservationDto reservationDto){
+        ReservationEntity reservationEntity = reservationService.addReservation(
+                mapper.toReservationEntity(reservationDto), reservationDto.getSeats(), reservationDto.getTicketData());
+        Long totalAmount = ticketTypeService.calculateTotalAmount(reservationDto.getTicketData());
+        return new ResponseEntity<>(Map.of("expires", reservationEntity.getExpires(), "total", totalAmount), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -33,6 +40,11 @@ public class ReservationController {
         return reservationService.findAllReservations().stream()
                 .map(reservationEntity -> mapper.toReservationDto(reservationEntity))
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public List<Integer> getReservation(@PathVariable Long id){
+        return reservationService.findSeatsOfReservationId(id);
     }
 
     @PutMapping("/{id}")
