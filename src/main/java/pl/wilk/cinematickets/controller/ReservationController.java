@@ -10,6 +10,7 @@ import pl.wilk.cinematickets.model.ReservationEntity;
 import pl.wilk.cinematickets.service.ReservationService;
 import pl.wilk.cinematickets.service.TicketTypeService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class ReservationController {
     private ReservationMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> newReservation(@RequestBody ReservationDto reservationDto){
+    public ResponseEntity<Map<String, Object>> newReservation(@Valid @RequestBody ReservationDto reservationDto){
         ReservationEntity reservationEntity = reservationService.addReservation(
                 mapper.toReservationEntity(reservationDto), reservationDto.getSeats(), reservationDto.getTicketData());
         Long totalAmount = ticketTypeService.calculateTotalAmount(reservationDto.getTicketData());
@@ -48,7 +49,7 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity editReservation(@RequestBody ReservationDto newReservationDto, @PathVariable Long id){
+    public ResponseEntity editReservation(@Valid @RequestBody ReservationDto newReservationDto, @PathVariable Long id){
         reservationService.editReservation(mapper.toReservationEntity(newReservationDto), id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
