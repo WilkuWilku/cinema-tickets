@@ -1,7 +1,9 @@
 package pl.wilk.cinematickets.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pl.wilk.cinematickets.model.ScreeningEntity;
 import pl.wilk.cinematickets.repository.ScreeningRepository;
 
@@ -28,7 +30,7 @@ public class ScreeningService {
                         oldScreening.setRoom(newScreening.getRoom());
                     screeningRepository.save(oldScreening);
                         },
-                        () -> new IllegalArgumentException("No screening found - id: "+id));
+                        () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No screening found - id: "+id));
     }
 
     public List<ScreeningEntity> findAllScreenings(){
@@ -50,7 +52,7 @@ public class ScreeningService {
 
     public ScreeningEntity findScreeningById(Long id){
         return screeningRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No screening found - id: "+id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"No screening found - id: "+id));
     }
 
 

@@ -1,7 +1,9 @@
 package pl.wilk.cinematickets.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pl.wilk.cinematickets.model.RoomEntity;
 import pl.wilk.cinematickets.repository.RoomRepository;
 
@@ -24,7 +26,7 @@ public class RoomService {
                                 oldRoom.setName(newRoom.getName());
                             roomRepository.save(oldRoom);
                         },
-                        () -> new IllegalArgumentException("No room found - id: "+id));
+                        () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No room found - id: "+id));
     }
 
     public List<RoomEntity> findAllRooms(){
@@ -33,6 +35,6 @@ public class RoomService {
 
     public RoomEntity findRoomById(Long id){
         return roomRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No room found - id: "+id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No room found - id: "+id));
     }
 }

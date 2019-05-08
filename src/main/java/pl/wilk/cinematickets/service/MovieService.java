@@ -2,7 +2,9 @@ package pl.wilk.cinematickets.service;
 
 import com.sun.nio.sctp.IllegalReceiveException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pl.wilk.cinematickets.model.MovieEntity;
 import pl.wilk.cinematickets.repository.MovieRepository;
 
@@ -25,7 +27,7 @@ public class MovieService {
                         oldMovie.setTitle(newMovie.getTitle());
                     movieRepository.save(oldMovie);
                         },
-                        () -> new IllegalArgumentException("No movie found - id: "+id));
+                        () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No movie found - id: "+id));
     }
 
     public List<MovieEntity> findAllMovies(){
@@ -34,7 +36,7 @@ public class MovieService {
 
     public MovieEntity findMovieById(Long id){
         return movieRepository.findById(id)
-                .orElseThrow(() -> new IllegalReceiveException("No movie found - id: "+id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No movie found - id: "+id));
     }
 
 }

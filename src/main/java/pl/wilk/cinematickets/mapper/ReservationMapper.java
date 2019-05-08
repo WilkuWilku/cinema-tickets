@@ -23,6 +23,7 @@ public abstract class ReservationMapper {
 
     @Mapping(target = "screeningId", source = "screening.id")
     @Mapping(target = "seats", expression = "java(reservationService.findSeatsOfReservationId(entity.getId()))")
+    @Mapping(target = "ticketData", ignore = true)
     public abstract ReservationDto toReservationDto(ReservationEntity entity);
 
 }

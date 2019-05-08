@@ -1,14 +1,19 @@
 package pl.wilk.cinematickets.service;
 
 import com.sun.nio.sctp.IllegalReceiveException;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pl.wilk.cinematickets.model.ReservationEntity;
 import pl.wilk.cinematickets.model.ScreeningEntity;
 import pl.wilk.cinematickets.model.Seat;
 import pl.wilk.cinematickets.repository.ReservationRepository;
 import pl.wilk.cinematickets.repository.ScreeningRepository;
 
+import javax.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,25 +26,35 @@ public class ReservationService {
     @Autowired
     private ScreeningRepository screeningRepository;
 
+    private void validateReservationTime(ScreeningEntity screeningEntity){
+        LocalDateTime latestReservationTime = screeningEntity.getStartingTime().minusMinutes(15);
+        if(LocalDateTime.now().isAfter(latestReservationTime))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Reservation can be made at latest 15 minutes before the screening begins");
+    }
+
     private void validateTicketsNumber(List<Integer> seatNumbers, Map<Long, Integer> ticketData){
         Integer ticketCount = ticketData.entrySet().stream()
                 .mapToInt(entry -> entry.getValue())
                 .sum();
         if(!ticketCount.equals(seatNumbers.size()))
-            throw new IllegalArgumentException("Number of tickets differs from number of seats to reserve");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Number of tickets differs from number of seats to reserve");
     }
 
     private void validateSeatsExistence(List<Integer> seatNumbers, List<Integer> screeningSeatNumbers){
         if(seatNumbers.stream()
                 .anyMatch(seatNumber -> !screeningSeatNumbers.contains(seatNumber)))
-            throw new IllegalArgumentException("List of seats contains seat numbers that do not exist in room");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "List of seats contains seat numbers that do not exist in room");
     }
 
     private void validateSeatsAvailability(List<Seat> screeningSeats, List<Integer> seatNumbers){
         if(screeningSeats.stream()
                 .filter(seat -> seatNumbers.contains(seat.getNumber()))
                 .anyMatch(seat -> seat.getReservation() != null))
-            throw new IllegalArgumentException("List of seats to reserve contains already reserved seats");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "List of seats to reserve contains already reserved seats");
     }
 
     private void validateSeatsDistance(List<Integer> seatNumbers, List<Seat> screeningSeats){
@@ -78,7 +93,8 @@ public class ReservationService {
                                                     .findFirst().get();
 
                 if(testSeat.getReservation() != null && onRight.getReservation() == null)
-                    throw new IllegalArgumentException("There cannot be a single seat left over between two already reserved seats: "+testSeat.getNumber());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "There cannot be a single seat left over between two already reserved seats: "+testSeat.getNumber());
 
             } else {
                 /* Check two seats on right */
@@ -90,7 +106,8 @@ public class ReservationService {
                         .findFirst().get();
 
                 if(testSeat.getReservation() != null && firstOnRight.getReservation() == null && secondOnRight.getReservation() != null)
-                    throw new IllegalArgumentException("There cannot be a single seat left over between two already reserved seats: "+testSeat.getNumber());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "There cannot be a single seat left over between two already reserved seats: "+testSeat.getNumber());
             }
 
         });
@@ -104,6 +121,7 @@ public class ReservationService {
                 .map(seat -> seat.getNumber())
                 .collect(Collectors.toList());
 
+        validateReservationTime(reservation.getScreening());
         validateTicketsNumber(seatNumbers, ticketData);
         validateSeatsExistence(seatNumbers, screeningSeatNumbers);
         validateSeatsAvailability(screeningSeats, seatNumbers);
@@ -127,7 +145,7 @@ public class ReservationService {
                         oldReservation.setOwnersLastName(newReservation.getOwnersLastName());
                     reservationRepository.save(oldReservation);
                         },
-                        () -> new IllegalArgumentException("No reservation found - id: "+id));
+                        () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No reservation found - id: "+id));
     }
 
     public List<ReservationEntity> findAllReservations(){
@@ -136,7 +154,7 @@ public class ReservationService {
 
     public List<Integer> findSeatsOfReservationId(Long id){
         ReservationEntity reservationEntity = reservationRepository.findById(id)
-                .orElseThrow(() -> new IllegalReceiveException("No reservation found - id: "+id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"No reservation found - id: "+id));
         return reservationEntity.getScreening().getSeats().stream()
                 .filter(seat -> seat.getReservation() != null)
                 .filter(seat -> seat.getReservation().getId().equals(id))

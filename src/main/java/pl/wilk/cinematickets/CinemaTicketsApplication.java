@@ -144,7 +144,7 @@ public class CinemaTicketsApplication implements CommandLineRunner {
         ScreeningEntity screening6 = ScreeningEntity.builder()
                 .movie(movie1)
                 .room(room3)
-                .startingTime(LocalDateTime.of(2019, 5, 13, 21, 45, 0, 0))
+                .startingTime(LocalDateTime.of(2019, 5, 8, 21, 55, 0, 0))
                 .seats(IntStream.range(1, room3.getMaxSeats()+1)
                         .mapToObj(index -> Seat.builder().number(index).build())
                         .collect(Collectors.toList()))
