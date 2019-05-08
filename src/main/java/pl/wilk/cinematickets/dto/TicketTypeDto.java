@@ -12,5 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class TicketTypeDto {
     private Long id;
     private String name;
+
+    /* Price in pennies */
     private Long price;
 }

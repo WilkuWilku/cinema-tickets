@@ -43,7 +43,6 @@ public class ReservationEntity {
     private LocalDateTime expires = LocalDateTime.now().plusHours(EXPIRES_AFTER_HOURS);
 
     @ManyToOne
-    @JsonBackReference
     private ScreeningEntity screening;
 
 }

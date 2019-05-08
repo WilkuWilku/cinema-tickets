@@ -33,7 +33,8 @@ public class ReservationController {
         ReservationEntity reservationEntity = reservationService.addReservation(
                 mapper.toReservationEntity(reservationDto), reservationDto.getSeats(), reservationDto.getTicketData());
         Long totalAmount = ticketTypeService.calculateTotalAmount(reservationDto.getTicketData());
-        return new ResponseEntity<>(Map.of("expires", reservationEntity.getExpires(), "total", totalAmount), HttpStatus.CREATED);
+        return new ResponseEntity<>(Map.of("expires", reservationEntity.getExpires(),
+                                            "total", totalAmount), HttpStatus.CREATED);
     }
 
     @GetMapping

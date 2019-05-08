@@ -19,7 +19,6 @@ public class Seat {
     private Integer number;
 
     @ManyToOne
-    @JsonBackReference
     private ReservationEntity reservation;
 
 

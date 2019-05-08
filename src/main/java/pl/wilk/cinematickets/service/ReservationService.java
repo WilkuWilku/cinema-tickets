@@ -9,9 +9,7 @@ import pl.wilk.cinematickets.model.Seat;
 import pl.wilk.cinematickets.repository.ReservationRepository;
 import pl.wilk.cinematickets.repository.ScreeningRepository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +42,60 @@ public class ReservationService {
             throw new IllegalArgumentException("List of seats to reserve contains already reserved seats");
     }
 
+    private void validateSeatsDistance(List<Integer> seatNumbers, List<Seat> screeningSeats){
+        /* Max number of seat in room */
+        Integer maxNumber = screeningSeats.stream()
+                .max(Comparator.comparing(Seat::getNumber))
+                .map(seat->seat.getNumber())
+                .get();
+
+        /* Deep copy of screening seats to apply changes */
+        List<Seat> testSeats = screeningSeats.stream()
+                .map(seat -> Seat.builder()
+                        .number(seat.getNumber())
+                        .reservation(seat.getReservation())
+                        .build())
+                .collect(Collectors.toList());
+
+        /* Mark seats that would be reserved */
+        seatNumbers.forEach(seatNumber ->
+                testSeats.stream()
+                        .filter(seat -> seat.getNumber().equals(seatNumber))
+                        .findFirst()
+                        .get()
+                        .setReservation(ReservationEntity.builder().id(-1L).build()));
+
+        /* Check if there is no gap between two reserved seats in entire room */
+        testSeats.forEach(testSeat -> {
+            /* Last seat - no seats on right */
+            if(testSeat.getNumber().equals(maxNumber))
+                return;
+
+            /* One before last seat - throw exception if seat on right is not reserved */
+            if(testSeat.getNumber().equals(maxNumber-1)) {
+                Seat onRight = testSeats.stream()
+                        .filter(s -> s.getNumber().equals(testSeat.getNumber()+1))
+                                                    .findFirst().get();
+
+                if(testSeat.getReservation() != null && onRight.getReservation() == null)
+                    throw new IllegalArgumentException("There cannot be a single seat left over between two already reserved seats: "+testSeat.getNumber());
+
+            } else {
+                /* Check two seats on right */
+                Seat firstOnRight = testSeats.stream()
+                        .filter(s -> s.getNumber().equals(testSeat.getNumber()+1))
+                        .findFirst().get();
+                Seat secondOnRight = testSeats.stream()
+                        .filter(s -> s.getNumber().equals(testSeat.getNumber()+2))
+                        .findFirst().get();
+
+                if(testSeat.getReservation() != null && firstOnRight.getReservation() == null && secondOnRight.getReservation() != null)
+                    throw new IllegalArgumentException("There cannot be a single seat left over between two already reserved seats: "+testSeat.getNumber());
+            }
+
+        });
+    }
+
     public ReservationEntity addReservation(ReservationEntity reservation, List<Integer> seatNumbers,
                                             Map<Long, Integer> ticketData){
         ScreeningEntity screeningEntity = reservation.getScreening();
@@ -55,6 +107,7 @@ public class ReservationService {
         validateTicketsNumber(seatNumbers, ticketData);
         validateSeatsExistence(seatNumbers, screeningSeatNumbers);
         validateSeatsAvailability(screeningSeats, seatNumbers);
+        validateSeatsDistance(seatNumbers, screeningSeats);
 
         ReservationEntity savedReservation = reservationRepository.save(reservation);
         screeningSeats.stream()

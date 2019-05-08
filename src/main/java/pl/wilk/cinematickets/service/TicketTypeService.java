@@ -39,9 +39,6 @@ public class TicketTypeService {
     }
 
     public Long calculateTotalAmount(Map<Long, Integer> ticketData){
-        //return ticketData.entrySet().stream()
-        //        .map(entry -> entry.getKey()*entry.getValue())
-        //        .reduce(0, (sum1, sum2) -> sum1+sum2);
 
         return ticketData.entrySet().stream()
                 .mapToLong(entry ->

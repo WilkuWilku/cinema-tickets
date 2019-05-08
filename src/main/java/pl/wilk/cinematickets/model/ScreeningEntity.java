@@ -27,11 +27,9 @@ public class ScreeningEntity {
     private LocalDateTime startingTime;
 
     @ManyToOne
-    @JsonBackReference
     private MovieEntity movie;
 
     @ManyToOne
-    @JsonBackReference
     private RoomEntity room;
 
     @ElementCollection
