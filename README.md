@@ -3,7 +3,7 @@ Ticket Booking App - TouK recruitment task in Spring Boot
 
 ### What's in use
 - JDK 11.0.2
-- PostgreSQL database
+- PostgreSQL
 
 ### Build and run with Gradle
 After cloning or downloading project, it can be built with:
@@ -15,7 +15,7 @@ After cloning or downloading project, it can be built with:
 As the build is finished, run the project with:  
 ```java -jar build/libs/cinema-tickets-0.0.1-SNAPSHOT.jar```
 
-Hibernate exceptions may appear due to ```spring.jpa.hibernate.ddl-auto=create-drop``` setting, but the application in running correctly
+Hibernate exceptions may appear due to ```spring.jpa.hibernate.ddl-auto=create-drop``` setting, but the application is running correctly.
 
 ### Demo
 Project contains demo script. It can be run with:
@@ -23,3 +23,4 @@ Project contains demo script. It can be run with:
 ```sh demo/ticket-booking```
 #### Windows (Powershell)
 ```.\demo\ticket-booking.bat```
+
