@@ -1,20 +1,17 @@
 package pl.wilk.cinematickets.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Data
 @Builder
+@Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Table(name = "rooms")
-public class RoomEntity {
+@Table(name = "ticketTypes")
+public class TicketTypeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +23,5 @@ public class RoomEntity {
 
     @Column
     @NotNull
-    private Integer maxSeats;
+    private Long price;
 }

@@ -1,5 +1,6 @@
 package pl.wilk.cinematickets.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +14,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Table(name = "rooms")
-public class RoomEntity {
+@Table(name = "movies")
+public class MovieEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +23,6 @@ public class RoomEntity {
 
     @Column
     @NotNull
-    private String name;
+    private String title;
 
-    @Column
-    @NotNull
-    private Integer maxSeats;
 }
