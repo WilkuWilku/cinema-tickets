@@ -19,6 +19,7 @@ import java.util.List;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Table(name = "reservations")
 public class ReservationEntity {
     private static final int EXPIRES_AFTER_HOURS = 1;
 

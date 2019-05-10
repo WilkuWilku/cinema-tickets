@@ -99,7 +99,7 @@ public class CinemaTicketsApplication implements CommandLineRunner {
         ScreeningEntity screening1 = ScreeningEntity.builder()
                 .movie(movie1)
                 .room(room1)
-                .startingTime(LocalDateTime.of(2019, 5, 13, 15, 0, 0, 0))
+                .startingTime(LocalDateTime.of(2019, 5, 15, 15, 0, 0, 0))
                 .seats(IntStream.range(1, room1.getMaxSeats()+1)
                         .mapToObj(index -> Seat.builder().number(index).build())
                         .collect(Collectors.toList()))
@@ -108,7 +108,7 @@ public class CinemaTicketsApplication implements CommandLineRunner {
         ScreeningEntity screening2 = ScreeningEntity.builder()
                 .movie(movie2)
                 .room(room1)
-                .startingTime(LocalDateTime.of(2019, 5, 13, 20, 45, 0, 0))
+                .startingTime(LocalDateTime.of(2019, 5, 15, 20, 45, 0, 0))
                 .seats(IntStream.range(1, room1.getMaxSeats()+1)
                         .mapToObj(index -> Seat.builder().number(index).build())
                         .collect(Collectors.toList()))
@@ -117,7 +117,7 @@ public class CinemaTicketsApplication implements CommandLineRunner {
         ScreeningEntity screening3 = ScreeningEntity.builder()
                 .movie(movie1)
                 .room(room2)
-                .startingTime(LocalDateTime.of(2019, 5, 14, 16, 20, 0, 0))
+                .startingTime(LocalDateTime.of(2019, 5, 16, 16, 20, 0, 0))
                 .seats(IntStream.range(1, room2.getMaxSeats()+1)
                         .mapToObj(index -> Seat.builder().number(index).build())
                         .collect(Collectors.toList()))
@@ -126,7 +126,7 @@ public class CinemaTicketsApplication implements CommandLineRunner {
         ScreeningEntity screening4 = ScreeningEntity.builder()
                 .movie(movie3)
                 .room(room2)
-                .startingTime(LocalDateTime.of(2019, 5, 14, 21, 45, 0, 0))
+                .startingTime(LocalDateTime.of(2019, 5, 16, 21, 45, 0, 0))
                 .seats(IntStream.range(1, room2.getMaxSeats()+1)
                         .mapToObj(index -> Seat.builder().number(index).build())
                         .collect(Collectors.toList()))
@@ -135,7 +135,7 @@ public class CinemaTicketsApplication implements CommandLineRunner {
         ScreeningEntity screening5 = ScreeningEntity.builder()
                 .movie(movie2)
                 .room(room3)
-                .startingTime(LocalDateTime.of(2019, 5, 14, 15, 15, 0, 0))
+                .startingTime(LocalDateTime.of(2019, 5, 16, 15, 15, 0, 0))
                 .seats(IntStream.range(1, room3.getMaxSeats()+1)
                         .mapToObj(index -> Seat.builder().number(index).build())
                         .collect(Collectors.toList()))
@@ -144,7 +144,7 @@ public class CinemaTicketsApplication implements CommandLineRunner {
         ScreeningEntity screening6 = ScreeningEntity.builder()
                 .movie(movie1)
                 .room(room3)
-                .startingTime(LocalDateTime.of(2019, 5, 8, 21, 55, 0, 0))
+                .startingTime(LocalDateTime.of(2019, 5, 18, 21, 55, 0, 0))
                 .seats(IntStream.range(1, room3.getMaxSeats()+1)
                         .mapToObj(index -> Seat.builder().number(index).build())
                         .collect(Collectors.toList()))
@@ -157,14 +157,14 @@ public class CinemaTicketsApplication implements CommandLineRunner {
         ReservationEntity reservation1 = ReservationEntity.builder()
                 .ownersFirstName("Jan")
                 .ownersLastName("Kowalski")
-                .screening(screening1)
+                .screening(screening3)
                 .build();
 
         reservationRepository.save(reservation1);
-        screening1.getSeats().stream()
-                .filter(seat -> Set.of(1, 2, 3, 4, 5, 6).contains(seat.getNumber()))
+        screening3.getSeats().stream()
+                .filter(seat -> Set.of(3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).contains(seat.getNumber()))
                 .forEach(seat -> seat.setReservation(reservation1));
-        screeningRepository.save(screening1);
+        screeningRepository.save(screening3);
 
     }
 }
